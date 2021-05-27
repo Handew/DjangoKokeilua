@@ -74,3 +74,9 @@ def edit_product_post(request, id):
     item.packagesize = request.POST['packagesize']
     item.save()
     return redirect(productslistview)
+
+def products_filtered(request, id):
+    productlist = Product.objects.all()
+    filteredproducts = productlist.filter(supplier = id)
+    context = {'products': filteredproducts}
+    return render (request,"products.html",context)

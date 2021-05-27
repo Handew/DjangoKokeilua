@@ -5,6 +5,7 @@ from .models import Product, Supplier
 def landingview(request):
     return render (request, "landingpage.html")
 
+# SUPPLIER
 def supplierlistview(request):
     supplierlist = Supplier.objects.all()
     context = {'suppliers': supplierlist}
@@ -23,6 +24,21 @@ def addsupplier(request):
 def deletesupplier(request, id):
     Supplier.objects.filter(id = id).delete()
     return redirect(request.META['HTTP_REFERER'])
+
+def edit_supplier_get(request, id):
+    supplier = Supplier.objects.filter(id = id)
+    context = {'supplier': supplier}
+    return render (request, "edit_supplier.html", context)
+
+def edit_supplier_post(request, id):
+    item = Supplier.objects.get(id = id)
+    item.contactname = request.POST['contactname']
+    item.address = request.POST['address']
+    item.phone = request.POST['phone']
+    item.email = request.POST['email']
+    item.country = request.POST['country']
+    item.save()
+    return redirect(supplierlistview)
 
 
 # PRODUCT
@@ -45,3 +61,16 @@ def addproduct(request):
 def deleteproduct(request, id):
     Product.objects.filter(id = id).delete()
     return redirect(request.META['HTTP_REFERER'])
+
+def edit_product_get(request, id):
+    product = Product.objects.filter(id = id)
+    context = {'product': product}
+    return render (request, "edit_product.html", context)
+
+def edit_product_post(request, id):
+    item = Product.objects.get(id = id)
+    item.unitprice = request.POST['unitprice']
+    item.unitsinstock = request.POST['unitsinstock']
+    item.packagesize = request.POST['packagesize']
+    item.save()
+    return redirect(productslistview)
